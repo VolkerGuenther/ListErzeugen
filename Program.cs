@@ -40,6 +40,7 @@ namespace ListeErzeugen
                 Console.WriteLine($"        <Order>{listofProject[i].Order}</Order>");
                 Console.WriteLine($"        <Customer>{listofProject[i].Customer}</Customer>");
                 Console.WriteLine("      </Project>");
+                Console.WriteLine("test");
                 
             }
             Console.WriteLine("</ProjectList>");
