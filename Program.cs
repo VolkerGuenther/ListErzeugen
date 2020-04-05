@@ -74,6 +74,7 @@ namespace ListeErzeugen
                 // Remove the following the // in the following line later. Do you understand the difference between 
                 // appending and writing to a file?
                 System.IO.File.WriteAllText(fileName, "");
+                // Overwrite the default with the FileWriter
                 UIWriter = new FileWriter(fileName);
             }
             int currentLevel = StartElement("ProjectList", 0);
