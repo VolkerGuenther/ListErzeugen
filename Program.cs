@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ListeErzeugen.UI;
+using System;
 using System.Collections.Generic;
 
 // I changed the code a lot for training purposes
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 // The following code has 2 bugs, the output is not correct
 // Find the bugs and fix them.
 // Hints: The end tag syntax is wrong for some elements. Set debugMode = true to find the other bug.
+
 namespace ListeErzeugen
 {
     class ProjectList
@@ -21,7 +23,11 @@ namespace ListeErzeugen
 
         // Write output to a file
         // Try with writeToFile = true
-        private static readonly bool writeToFile = false;
+        private static readonly bool writeToFile = true;
+
+        // A better way to write to different locations (console / file)
+        private static UIWriter UIWriter;
+        private static readonly bool useUIWriter = true;
 
         // File name
         // Please create a directory c:/temp
@@ -60,12 +66,15 @@ namespace ListeErzeugen
                     },
             };
 
+            // Set default UI (<- Was heisst UI?) 
+            UIWriter = new ConsoleWriter();
             if (writeToFile)
             {
                 // Write empty file
                 // Remove the following the // in the following line later. Do you understand the difference between 
                 // appending and writing to a file?
                 System.IO.File.WriteAllText(fileName, "");
+                UIWriter = new FileWriter(fileName);
             }
             int currentLevel = StartElement("ProjectList", 0);
             for (int i = 0; i < listofProject.Count; i++)
@@ -112,6 +121,14 @@ namespace ListeErzeugen
 
         private static void WriteString(String theString)
         {
+            if (useUIWriter)
+            {
+                UIWriter.WriteString(theString);
+                // return means to leave the method writeString
+                return;
+            }
+            // We don't need else statement
+            // We don't reach the following line if useUIWriter == true because of the return statement
             if (writeToFile)
             {
                 using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true);
@@ -125,6 +142,12 @@ namespace ListeErzeugen
 
         private static void WriteLineString(String theString)
         {
+            if (useUIWriter)
+            {
+                UIWriter.WriteLineString(theString);
+                // return means to leave the method writeString
+                return;
+            }
             if (writeToFile)
             {
                 using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true);
