@@ -17,11 +17,11 @@ namespace ListeErzeugen
     {
         // Write additional information (i.e. (<- wofür steht die Abkürzung i.e.?) variable values) into the console if set to true
         // You can also use the debugger instead to inspect variable values
-        private static readonly bool debugMode = false;
+        private static readonly bool debugMode = true;
 
         // Write output to a file
         // Try with writeToFile = true
-        private static readonly bool writeToFile = false;
+        private static readonly bool writeToFile = true;
 
         // File name
         // Please create a directory c:/temp
@@ -80,6 +80,7 @@ namespace ListeErzeugen
                 currentLevel = EndElement("Project", currentLevel);
 
             }
+            currentLevel = EndElement("ProjectList", currentLevel);
             // The next line I commented out. currentLevel will equal 1.
             //currentLevel = endElement("ProjectList", currentLevel);
             if (currentLevel != 0 && debugMode)
@@ -160,7 +161,7 @@ namespace ListeErzeugen
         private static int WriteElement(string element, Boolean start)
         {
             // Entweder oder. Wenn Start == true, dann "<", ansonsten "</>"
-            String firstString = start ? "<" : "</>";
+            String firstString = start ? "<" : "</";
             WriteLineString(String.Concat(firstString, element, ">"));
             // Wenn start == true, dann wird 1 zurückgegeben, ansonsten -1
             int levelModifier = start ? 1 : -1;
