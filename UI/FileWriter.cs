@@ -6,7 +6,7 @@ namespace ListeErzeugen.UI
 {
     class FileWriter : UIWriter
     {
-        protected String FileName;
+        protected String FileName { get; set; }
 
         public FileWriter(String FileName)
         {
