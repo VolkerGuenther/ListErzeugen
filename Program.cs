@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 // I changed the code a lot for training purposes
 // Your version is much shorter and was correct. 
@@ -65,7 +66,7 @@ namespace ListeErzeugen
                 // Write empty file
                 // Remove the following the // in the following line later. Do you understand the difference between 
                 // appending and writing to a file?
-                System.IO.File.WriteAllText(fileName, "");
+                File.WriteAllText(fileName, "");
             }
             int currentLevel = StartElement("ProjectList", 0);
             for (int i = 0; i < listofProject.Count; i++)
@@ -99,9 +100,9 @@ namespace ListeErzeugen
 
         }
 
-        private static void WriteElementWithContent(String element, String content, int currentLevel)
+        private static void WriteElementWithContent(String element, string content, int currentLevel)
         {
-            WriteTabs(currentLevel);
+           WriteTabs(currentLevel);
             // We could put everything into 1 line (task: replace the following lines with just one line Console.WriteLine(...) 
             // but this is easier to read:
 
@@ -115,7 +116,8 @@ namespace ListeErzeugen
         {
             if (writeToFile)
             {
-                using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true);
+               using 
+                    StreamWriter file = new System.IO.StreamWriter(fileName, true);
                 file.Write(theString);
             }
             else
