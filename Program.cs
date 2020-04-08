@@ -1,6 +1,6 @@
-﻿using System;
+﻿using ListeErzeugen.UI;
+using System;
 using System.Collections.Generic;
-using System.IO;
 
 // I changed the code a lot for training purposes
 // Your version is much shorter and was correct. 
@@ -12,17 +12,22 @@ using System.IO;
 // The following code has 2 bugs, the output is not correct
 // Find the bugs and fix them.
 // Hints: The end tag syntax is wrong for some elements. Set debugMode = true to find the other bug.
+
 namespace ListeErzeugen
 {
     class ProjectList
     {
         // Write additional information (i.e. (<- wofür steht die Abkürzung i.e.?) variable values) into the console if set to true
         // You can also use the debugger instead to inspect variable values
-        private static readonly bool debugMode = true;
+        private static readonly bool debugMode = false;
 
         // Write output to a file
         // Try with writeToFile = true
         private static readonly bool writeToFile = true;
+
+        // A better way to write to different locations (console / file)
+        private static UIWriter UIWriter;
+        private static readonly bool useUIWriter = true;
 
         // File name
         // Please create a directory c:/temp
@@ -61,12 +66,16 @@ namespace ListeErzeugen
                     },
             };
 
+            // Set default UI (<- Was heisst UI?) 
+            UIWriter = new ConsoleWriter();
             if (writeToFile)
             {
                 // Write empty file
                 // Remove the following the // in the following line later. Do you understand the difference between 
                 // appending and writing to a file?
-                File.WriteAllText(fileName, "");
+                System.IO.File.WriteAllText(fileName, "");
+                // Overwrite the default with the FileWriter
+                UIWriter = new FileWriter(fileName);
             }
             int currentLevel = StartElement("ProjectList", 0);
             for (int i = 0; i < listofProject.Count; i++)
@@ -81,7 +90,6 @@ namespace ListeErzeugen
                 currentLevel = EndElement("Project", currentLevel);
 
             }
-            currentLevel = EndElement("ProjectList", currentLevel);
             // The next line I commented out. currentLevel will equal 1.
             //currentLevel = endElement("ProjectList", currentLevel);
             if (currentLevel != 0 && debugMode)
@@ -100,9 +108,9 @@ namespace ListeErzeugen
 
         }
 
-        private static void WriteElementWithContent(String element, string content, int currentLevel)
+        private static void WriteElementWithContent(String element, String content, int currentLevel)
         {
-           WriteTabs(currentLevel);
+            WriteTabs(currentLevel);
             // We could put everything into 1 line (task: replace the following lines with just one line Console.WriteLine(...) 
             // but this is easier to read:
 
@@ -114,10 +122,17 @@ namespace ListeErzeugen
 
         private static void WriteString(String theString)
         {
+            if (useUIWriter)
+            {
+                UIWriter.WriteString(theString);
+                // return means to leave the method writeString
+                return;
+            }
+            // We don't need else statement
+            // We don't reach the following line if useUIWriter == true because of the return statement
             if (writeToFile)
             {
-               using 
-                    StreamWriter file = new System.IO.StreamWriter(fileName, true);
+                using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true);
                 file.Write(theString);
             }
             else
@@ -128,6 +143,12 @@ namespace ListeErzeugen
 
         private static void WriteLineString(String theString)
         {
+            if (useUIWriter)
+            {
+                UIWriter.WriteLineString(theString);
+                // return means to leave the method writeString
+                return;
+            }
             if (writeToFile)
             {
                 using System.IO.StreamWriter file = new System.IO.StreamWriter(fileName, true);
@@ -163,7 +184,7 @@ namespace ListeErzeugen
         private static int WriteElement(string element, Boolean start)
         {
             // Entweder oder. Wenn Start == true, dann "<", ansonsten "</>"
-            String firstString = start ? "<" : "</";
+            String firstString = start ? "<" : "</>";
             WriteLineString(String.Concat(firstString, element, ">"));
             // Wenn start == true, dann wird 1 zurückgegeben, ansonsten -1
             int levelModifier = start ? 1 : -1;
